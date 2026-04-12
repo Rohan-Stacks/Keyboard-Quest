@@ -1,5 +1,5 @@
-<!-- Making the basic main page, no functionality yet,
-just barebones for future development -->
+<!-- Making the basic main page, made the button into a url
+ to the level selection page-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +14,8 @@ just barebones for future development -->
     <main class="page">
         <h1>Keyboard Quest</h1>
         <p>Typing Tutor for Software Engineering students</p>
-        <button>Start Game</button>
+
+        <a class="start-btn" href="{% url 'levels' %}">Start Game</a>
     </main>
 </body>
 </html>

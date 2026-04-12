@@ -1,0 +1,22 @@
+<!-- For now there I haven't added an actual page for the
+levels So im just leaving a placeholder to avoid an error
+page and to take the user back to the selection page -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level {{ level }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tutor/style.css' %}">
+</head>
+<body>
+    <main class="page">
+        <h1>Level {{ level }}</h1>
+        <p>This level is coming soon.</p>
+
+        <a class="start-btn" href="{% url 'levels' %}">Back to Levels</a>
+    </main>
+</body>
+</html>

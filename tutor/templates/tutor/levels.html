@@ -1,0 +1,30 @@
+<!-- Making the level selection page (I did not yet add non-functionality
+for each button that ain't the next leve or completed)-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose a Level</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tutor/style.css' %}">
+</head>
+<body>
+    <main class="page">
+        <h1>Keyboard Quest</h1>
+        <p>Select a level</p>
+
+        <section class="level-grid">
+            {% for level in levels %}
+                <a
+                    href="{% url 'level_placeholder' level.number %}"
+                    class="level-box level-{{ level.status }} {% if level.number == 10 %}level-10{% endif %}"
+                >
+                    <span>{{ level.number }}</span>
+                </a>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+</html>
