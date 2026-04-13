@@ -1,35 +1,160 @@
-/* Adding basic stylization to the main page,also added stylization to the level
- boxes (Green background for completed levels, light gray background for the
- next level to do, and dark gray background for levels that are not next and incomplete
- (also changed the positioning on the main page a bit) */
+/* I changed the home page with bigger buttons and a softer layout. */
+
+:root {
+    --bg1: #0f172a;
+    --bg2: #111827;
+    --card: rgba(255, 255, 255, 0.08);
+    --card-border: rgba(255, 255, 255, 0.18);
+    --text: #ffffff;
+    --muted: rgba(255, 255, 255, 0.75);
+    --start: #2563eb;
+    --about: #7c3aed;
+    --settings: #374151;
+    --green: #16a34a;
+    --light-gray: #d1d5db;
+    --dark-gray: #4b5563;
+}
+
+* {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #111827;
-    color: white;
+    background: radial-gradient(circle at top, var(--bg1), var(--bg2));
+    color: var(--text);
 }
 
 .page {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    padding: 32px 20px;
     text-align: center;
-    gap: 16px;
-    padding: 24px;
+    gap: 28px;
 }
 
-.start-btn {
-    display: inline-block;
-    padding: 12px 22px;
-    border-radius: 12px;
+.hero {
+    max-width: 700px;
+}
+
+.eyebrow {
+    margin: 0 0 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.82rem;
+    color: var(--muted);
+}
+
+h1 {
+    margin: 0;
+    font-size: clamp(2.4rem, 6vw, 4.6rem);
+}
+
+.subtitle {
+    margin: 14px 0 0;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--muted);
+}
+
+.menu-grid {
+    width: min(900px, 100%);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 18px;
+}
+
+.menu-card {
+    min-height: 170px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 24px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
     text-decoration: none;
     color: white;
-    background: #2563eb;
-    border: 2px solid white;
+    background: var(--card);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.menu-card:hover {
+    transform: translateY(-3px);
+}
+
+.menu-title {
+    font-size: 1.7rem;
     font-weight: 700;
+}
+
+.menu-text {
+    font-size: 0.98rem;
+    color: var(--muted);
+}
+
+.menu-start {
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.95), rgba(29, 78, 216, 0.95));
+}
+
+.menu-about {
+    background: linear-gradient(180deg, rgba(124, 58, 237, 0.95), rgba(109, 40, 217, 0.95));
+}
+
+.menu-settings {
+    background: linear-gradient(180deg, rgba(55, 65, 81, 0.95), rgba(31, 41, 55, 0.95));
+    cursor: not-allowed;
+}
+
+.menu-settings:disabled {
+    opacity: 1;
+}
+
+.about-page {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.about-card {
+    width: min(760px, 100%);
+    text-align: left;
+    padding: 28px;
+    border-radius: 28px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.about-card h1,
+.about-card h2 {
+    margin-top: 0;
+}
+
+.about-card p {
+    line-height: 1.7;
+    color: var(--muted);
+}
+
+.about-card a {
+    color: white;
+    font-weight: 700;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 2px solid white;
+    text-decoration: none;
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .level-grid {
@@ -63,18 +188,44 @@ body {
 }
 
 .level-completed {
-    background: #16a34a;
+    background: var(--green);
 }
 
 .level-current {
-    background: #d1d5db;
+    background: var(--light-gray);
 }
 
 .level-locked {
-    background: #4b5563;
+    background: var(--dark-gray);
 }
 
 .level-10 {
     grid-column: 2;
     justify-self: center;
+}
+
+.start-btn {
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: white;
+    background: var(--start);
+    border: 2px solid white;
+    font-weight: 700;
+}
+
+@media (max-width: 760px) {
+    .menu-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .level-grid {
+        grid-template-columns: repeat(2, 110px);
+    }
+
+    .level-10 {
+        grid-column: auto;
+        justify-self: auto;
+    }
 }

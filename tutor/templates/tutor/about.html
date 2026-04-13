@@ -1,0 +1,39 @@
+<!-- I added the About page so users can see my mission and
+contact me if they need help. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Keyboard Quest</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tutor/style.css' %}">
+</head>
+<body>
+    <main class="page about-page">
+        <section class="about-card">
+            <p class="eyebrow">About Keyboard Quest</p>
+            <h1>My Mission</h1>
+            <p>
+                I made Keyboard Quest to help Software Engineering students improve typing speed,
+                accuracy, and confidence while also learning technical vocabulary in a simple and
+                engaging way.
+            </p>
+            <p>
+                The game is designed to start with easier typing practice and gradually move into
+                more difficult words, sentences, and paragraphs, so students can build skills over
+                time.
+            </p>
+
+            <h2>Need help?</h2>
+            <p>
+                If you have any issue, please contact me at
+                <a href="mailto:rohan.nalakonda@gmail.com">rohan.nalakonda@gmail.com</a>.
+            </p>
+
+            <a class="back-link" href="{% url 'home' %}">Back to Home</a>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,5 +1,6 @@
-<!-- Making the basic main page, made the button into a url
- to the level selection page-->
+<!-- I redesigned the home page into a cleaner menu with
+Start Typing, Settings, and About options (settings doesnt do anything yet
+ but planed to add an option to turn off accuracy, wpm, font color, and what not-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,10 +13,30 @@
 </head>
 <body>
     <main class="page">
-        <h1>Keyboard Quest</h1>
-        <p>Typing Tutor for Software Engineering students</p>
+        <section class="hero">
+            <p class="eyebrow">Software Engineering Typing Tutor</p>
+            <h1>Keyboard Quest</h1>
+            <p class="subtitle">
+                By Rohan Nalakonda
+            </p>
+        </section>
 
-        <a class="start-btn" href="{% url 'levels' %}">Start Game</a>
+        <nav class="menu-grid" aria-label="Main menu">
+            <a class="menu-card menu-start" href="{% url 'levels' %}">
+                <span class="menu-title">Start Typing</span>
+                <span class="menu-text">Go to level selection</span>
+            </a>
+
+            <button class="menu-card menu-settings" type="button" disabled>
+                <span class="menu-title">Settings</span>
+                <span class="menu-text">Coming soon</span>
+            </button>
+
+            <a class="menu-card menu-about" href="{% url 'about' %}">
+                <span class="menu-title">About</span>
+                <span class="menu-text">Mission and contact</span>
+            </a>
+        </nav>
     </main>
 </body>
 </html>
