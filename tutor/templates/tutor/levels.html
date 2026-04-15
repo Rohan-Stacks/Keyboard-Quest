@@ -1,5 +1,5 @@
-<!-- Making the level selection page (I did not yet add non-functionality
-for each button that ain't the next leve or completed)-->
+<!-- I made the level selection page, and I will connect the
+level pages to it. -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +18,7 @@ for each button that ain't the next leve or completed)-->
         <section class="level-grid">
             {% for level in levels %}
                 <a
-                    href="{% url 'level_placeholder' level.number %}"
+                    href="{% url 'level_page' level.number %}"
                     class="level-box level-{{ level.status }} {% if level.number == 10 %}level-10{% endif %}"
                 >
                     <span>{{ level.number }}</span>

@@ -1,0 +1,33 @@
+<!-- One reusable level page so every level can use the same
+layout for now. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level {{ level }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tutor/style.css' %}">
+</head>
+<body>
+    <main class="page level-page">
+        <section class="level-card">
+            <p class="eyebrow">Level {{ level }}</p>
+            <h1>Typing Practice</h1>
+            <p class="level-text"> Start typing the text below to begin this level. </p>
+
+            <div class="prompt-box">
+                <p> NA (no actual stuff yet) </p>
+            </div>
+
+            <textarea class="typing-box" rows="6" placeholder="Type here..."></textarea>
+
+            <div class="level-actions">
+                <a class="back-link" href="{% url 'levels' %}">Back to Levels</a>
+                <button class="start-btn" type="button">Submit</button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
