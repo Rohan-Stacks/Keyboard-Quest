@@ -29,6 +29,6 @@ def level_select(request):
 
 def level_page(request, level):
     if 1 <= level <= 10:
-        # This is the reusable page for every level.
-        return render(request, "tutor/level_page.html", {"level": level})
+        # Each level loads its own file so the prompts can stay different.
+        return render(request, f"tutor/levels/level{level}.html", {"level": level})
     raise Http404("Level does not exist")

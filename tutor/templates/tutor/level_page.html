@@ -1,5 +1,5 @@
-<!-- One reusable level page so every level can use the same
-layout for now. -->
+<!-- I made one reusable typing layout for each level. Also there is now a timer
+instead of a submit button-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,21 +13,48 @@ layout for now. -->
 <body>
     <main class="page level-page">
         <section class="level-card">
-            <p class="eyebrow">Level {{ level }}</p>
-            <h1>Typing Practice</h1>
-            <p class="level-text"> Start typing the text below to begin this level. </p>
-
-            <div class="prompt-box">
-                <p> NA (no actual stuff yet) </p>
+            <div class="level-head">
+                <p class="eyebrow">Level {{ level }}</p>
+                <p class="timer-box">Time: <span id="timeLeft">{% block time_limit %}20{% endblock %}</span>s</p>
             </div>
 
-            <textarea class="typing-box" rows="6" placeholder="Type here..."></textarea>
-
-            <div class="level-actions">
-                <a class="back-link" href="{% url 'levels' %}">Back to Levels</a>
-                <button class="start-btn" type="button">Submit</button>
+            <div class="typing-wrap">
+                <div class="prompt-fade">{% block prompt %}{% endblock %}</div>
+                <textarea id="typingInput" class="typing-input"></textarea>
             </div>
+
+            <a class="back-link" href="{% url 'levels' %}">Back to Levels</a>
         </section>
     </main>
+
+<!-- Here is the timer that is set to start after the user inputs any character,
+have not added a "level_completion" page yet so it just shows a 404 error. -->
+
+<script>
+    const typingInput = document.getElementById("typingInput");
+    const timeLeft = document.getElementById("timeLeft");
+    const level = {{ level }};
+
+    let started = false;
+    let time = parseInt(timeLeft.textContent, 10);
+
+    function startTimer() {
+        if (started) return;
+        started = true;
+
+        const timer = setInterval(() => {
+            time -= 1;
+            timeLeft.textContent = time;
+
+            if (time <= 0) {
+                clearInterval(timer);
+                typingInput.disabled = true;
+                window.location.href = "/level-complete/" + level + "/";
+            }
+        }, 1000);
+    }
+
+    typingInput.addEventListener("input", startTimer);
+</script>
 </body>
 </html>
