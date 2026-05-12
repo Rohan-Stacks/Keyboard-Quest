@@ -275,11 +275,14 @@ h1 {
 .prompt-fade {
     position: absolute;
     inset: 0;
+    margin: 0;
     padding: 18px;
     color: rgba(255, 255, 255, 0.28);
     white-space: pre-wrap;
     pointer-events: none;
     line-height: 1.8;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 1rem;
 }
 
 .typing-input {
@@ -292,6 +295,17 @@ h1 {
     background: transparent;
     color: white;
     padding: 18px;
-    font: inherit;
     line-height: 1.8;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 1rem;
+}
+
+.prompt-char {
+    display: inline-block;
+    width: 1ch;
+    opacity: 1;
+}
+
+.prompt-char.typed {
+    visibility: hidden;
 }

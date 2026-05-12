@@ -18,10 +18,12 @@ instead of a submit button-->
                 <p class="timer-box">Time: <span id="timeLeft">{% block time_limit %}20{% endblock %}</span>s</p>
             </div>
 
-            <div class="typing-wrap">
-                <div class="prompt-fade">{% block prompt %}{% endblock %}</div>
-                <textarea id="typingInput" class="typing-input"></textarea>
-            </div>
+<div class="typing-wrap">
+    <div id="promptFade" class="prompt-fade" aria-hidden="true"></div>
+    <textarea id="typingInput" class="typing-input" spellcheck="false"></textarea>
+</div>
+
+<div id="promptSource" style="display:none;">{% block prompt %}{% endblock %}</div>
 
             <a class="back-link" href="{% url 'levels' %}">Back to Levels</a>
         </section>
@@ -35,8 +37,49 @@ have not added a "level_completion" page yet so it just shows a 404 error. -->
     const timeLeft = document.getElementById("timeLeft");
     const level = {{ level }};
 
-    let started = false;
-    let time = parseInt(timeLeft.textContent, 10);
+    // I keep only the remaining guide text visible.
+const promptSource = document.getElementById("promptSource");
+const promptText = (promptSource.textContent || "").replace(/\r/g, "").trim();
+
+let started = false;
+let time = parseInt(timeLeft.textContent, 10);
+
+const charSpans = [];
+
+// I build fixed guide slots so letters never shift left.
+function buildPromptGuide() {
+    promptFade.innerHTML = "";
+    charSpans.length = 0;
+
+    for (const ch of promptText) {
+        if (ch === "\n") {
+            promptFade.appendChild(document.createElement("br"));
+            charSpans.push(null);
+            continue;
+        }
+
+        const span = document.createElement("span");
+        span.className = "prompt-char";
+        span.textContent = ch === " " ? "\u00A0" : ch;
+        promptFade.appendChild(span);
+        charSpans.push(span);
+    }
+}
+
+function updatePromptGuide() {
+    const typedLength = typingInput.value.length;
+
+    for (let i = 0; i < charSpans.length; i++) {
+        const span = charSpans[i];
+        if (!span) continue;
+
+        if (i < typedLength) {
+            span.classList.add("typed");
+        } else {
+            span.classList.remove("typed");
+        }
+    }
+}
 
     function startTimer() {
         if (started) return;
@@ -54,7 +97,13 @@ have not added a "level_completion" page yet so it just shows a 404 error. -->
         }, 1000);
     }
 
-    typingInput.addEventListener("input", startTimer);
+buildPromptGuide();
+updatePromptGuide();
+
+typingInput.addEventListener("input", () => {
+    startTimer();
+    updatePromptGuide();
+});
 </script>
 </body>
 </html>
