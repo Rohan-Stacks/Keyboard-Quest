@@ -17,7 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from tutor import views as tutor_views
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path(
+        "level-complete/<int:level>/",
+        tutor_views.level_complete,
+        name="level_complete",
+    ),
     path("", include("tutor.urls")),
 ]

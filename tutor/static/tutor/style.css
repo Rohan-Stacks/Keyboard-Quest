@@ -309,3 +309,46 @@ h1 {
 .prompt-char.typed {
     visibility: hidden;
 }
+
+/* level completion page layout */
+
+.lvl-finish {
+    text-align: left;
+}
+
+.lvl-finish-heading {
+    margin: 0 0 14px;
+    font-size: 1.35rem;
+    font-weight: bold;
+}
+
+.lvl-finish-slot {
+    min-height: 100px;
+    margin: 0 0 16px;
+    padding: 12px;
+    border: 2px dashed rgba(255, 255, 255, 0.35);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.lvl-finish-stats {
+    margin: 0 0 16px;
+}
+
+.lvl-finish-stats p {
+    margin: 6px 0;
+    color: var(--muted);
+}
+
+.lvl-finish-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.lvl-finish-buttons .back-link {
+    margin-top: 0;
+}
