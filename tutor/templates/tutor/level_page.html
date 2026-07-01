@@ -18,8 +18,9 @@ instead of a submit button-->
                 <p class="timer-box">Time: <span id="timeLeft">{% block time_limit %}20{% endblock %}</span>s</p>
             </div>
 
-<div class="typing-wrap">
+<div class="typing-wrap" id="typingWrap">
     <div id="promptFade" class="prompt-fade" aria-hidden="true"></div>
+    <div id="caretMarker" class="caret-marker"></div>
     <textarea id="typingInput" class="typing-input" spellcheck="false"></textarea>
 </div>
 
@@ -35,7 +36,15 @@ have not added a "level_completion" page yet so it just shows a 404 error. -->
 <script>
     const typingInput = document.getElementById("typingInput");
     const timeLeft = document.getElementById("timeLeft");
+    const promptFade = document.getElementById("promptFade");
+    const typingWrap = document.getElementById("typingWrap");
+    const caretMarker = document.getElementById("caretMarker");
     const level = {{ level }};
+    const doneUrl = "{% url 'level_complete' level %}";
+
+    if (sessionStorage.getItem("level_result_" + level)) {
+        window.location.replace(doneUrl);
+    }
 
     // I keep only the remaining guide text visible.
 const promptSource = document.getElementById("promptSource");
@@ -43,6 +52,7 @@ const promptText = (promptSource.textContent || "").replace(/\r/g, "").trim();
 
 let started = false;
 let time = parseInt(timeLeft.textContent, 10);
+const levelSeconds = time;
 
 const charSpans = [];
 
@@ -59,26 +69,111 @@ function buildPromptGuide() {
         }
 
         const span = document.createElement("span");
-        span.className = "prompt-char";
-        span.textContent = ch === " " ? "\u00A0" : ch;
+        span.className = "prompt-char todo";
+        span.textContent = ch;
         promptFade.appendChild(span);
         charSpans.push(span);
     }
 }
 
 function updatePromptGuide() {
-    const typedLength = typingInput.value.length;
+    var typed = typingInput.value;
+    if (typed.length > promptText.length) {
+        typingInput.value = typed.slice(0, promptText.length);
+        typed = typingInput.value;
+    }
 
-    for (let i = 0; i < charSpans.length; i++) {
-        const span = charSpans[i];
+    for (var i = 0; i < charSpans.length; i++) {
+        var span = charSpans[i];
         if (!span) continue;
 
-        if (i < typedLength) {
-            span.classList.add("typed");
+        if (i >= typed.length) {
+            span.className = "prompt-char todo";
+            span.textContent = promptText[i];
+            continue;
+        }
+
+        if (typed[i] === promptText[i]) {
+            span.className = "prompt-char hit";
         } else {
-            span.classList.remove("typed");
+            span.className = "prompt-char miss";
+        }
+        span.textContent = promptText[i];
+    }
+}
+
+// Moves the cursor
+
+function moveCaretMarker() {
+    var typedLen = typingInput.value.length;
+    var spot = null;
+    var afterEnd = false;
+
+    for (var i = 0; i < charSpans.length; i++) {
+        if (!charSpans[i]) continue;
+        if (i === typedLen) {
+            spot = charSpans[i];
+            break;
         }
     }
+
+    if (!spot) {
+        for (var j = charSpans.length - 1; j >= 0; j--) {
+            if (charSpans[j]) {
+                spot = charSpans[j];
+                afterEnd = true;
+                break;
+            }
+        }
+    }
+
+//Moving the cursor to the text wrapping
+
+    if (!spot) {
+        caretMarker.style.display = "none";
+        return;
+    }
+
+    var rect = spot.getBoundingClientRect();
+    var wrapRect = typingWrap.getBoundingClientRect();
+    var left = rect.left - wrapRect.left;
+    var top = rect.top - wrapRect.top;
+
+    if (afterEnd) {
+        left = rect.right - wrapRect.left;
+    } else {
+        left = left - 2;
+    }
+
+    caretMarker.style.display = "block";
+    caretMarker.style.left = left + "px";
+    caretMarker.style.top = top + "px";
+    caretMarker.style.height = rect.height + "px";
+}
+
+// how many characters the user typed correctly
+
+function countCorrect(prompt, typed) {
+    var hits = 0;
+    for (var i = 0; i < prompt.length; i++) {
+        if (typed[i] === prompt[i]) hits++;
+    }
+    return hits;
+}
+
+// Accuracy
+
+function countAccuracy(prompt, typed) {
+    if (prompt.length === 0) return 100;
+    return (countCorrect(prompt, typed) / prompt.length) * 100;
+}
+
+// Words Per minute
+
+function countWpm(prompt, typed, seconds) {
+    if (seconds <= 0) return 0;
+    var correct = countCorrect(prompt, typed);
+    return (correct / 5) / (seconds / 60);
 }
 
     function startTimer() {
@@ -89,9 +184,21 @@ function updatePromptGuide() {
             time -= 1;
             timeLeft.textContent = time;
 
+// Saving the player's results
+
             if (time <= 0) {
                 clearInterval(timer);
                 typingInput.disabled = true;
+                var typedText = typingInput.value;
+                sessionStorage.setItem(
+                    "level_result_" + level,
+                    JSON.stringify({
+                        prompt: promptText,
+                        typed: typedText,
+                        accuracy: countAccuracy(promptText, typedText),
+                        wpm: countWpm(promptText, typedText, levelSeconds)
+                    })
+                );
                 window.location.href = "/level-complete/" + level + "/";
             }
         }, 1000);
@@ -99,11 +206,19 @@ function updatePromptGuide() {
 
 buildPromptGuide();
 updatePromptGuide();
+moveCaretMarker();
+
+// the timer, prompt highlighting, and cursor position stay up to date as the user interacts with the typing area.
 
 typingInput.addEventListener("input", () => {
     startTimer();
     updatePromptGuide();
+    moveCaretMarker();
 });
+
+typingInput.addEventListener("keyup", moveCaretMarker);
+typingInput.addEventListener("click", moveCaretMarker);
+typingWrap.addEventListener("scroll", moveCaretMarker);
 </script>
 </body>
 </html>
