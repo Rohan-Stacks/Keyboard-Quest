@@ -1,0 +1,124 @@
+<!-- The level completion page, I haven't added any real functionality yet
+ other than some preperations to add more later.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level {{ level }} — Complete</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tutor/style.css' %}">
+</head>
+<body>
+    <main class="page level-page">
+        <section class="level-card lvl-finish">
+            <p class="eyebrow">Level {{ level }}</p>
+
+            <h1 class="lvl-finish-heading" id="resultTitle">Level complete</h1>
+
+            <div class="lvl-finish-slot" id="reviewSlot"></div>
+
+            <div class="lvl-finish-stats">
+                <p>Accuracy: <span id="accuracyOut">—</span></p>
+                <p>WPM: <span id="wpmOut">—</span></p>
+            </div>
+
+            <nav class="lvl-finish-buttons">
+                <a class="back-link" href="{% url 'level_page' level %}" id="restartLink">Restart</a>
+                <a class="back-link" href="{% url 'levels' %}">Back to levels</a>
+                <a class="back-link" href="{% url 'home' %}">Back to home</a>
+            </nav>
+        </section>
+    </main>
+
+<script>
+    var levelNumber = {{ level }};
+    var resultsKey = "level_result_" + levelNumber;
+    var title = document.getElementById("resultTitle");
+    var reviewSlot = document.getElementById("reviewSlot");
+    var accuracyOut = document.getElementById("accuracyOut");
+    var wpmOut = document.getElementById("wpmOut");
+
+    function updateFinishPage() {
+        var saved = sessionStorage.getItem(resultsKey);
+
+        if (!saved) {
+            title.textContent = "Nothing here yet";
+            title.className = "lvl-finish-heading";
+            reviewSlot.textContent = "";
+            accuracyOut.textContent = "—";
+            wpmOut.textContent = "—";
+            return;
+        }
+
+        var data;
+        try {
+            data = JSON.parse(saved);
+        } catch (error) {
+            title.textContent = "Could not load completion data";
+            title.className = "lvl-finish-heading";
+            reviewSlot.textContent = "";
+            accuracyOut.textContent = "—";
+            wpmOut.textContent = "—";
+            return;
+        }
+
+        var passed = data.accuracy >= 90 && data.wpm >= 55;
+        if (passed) {
+            var beaten = [];
+            var rawPassed = localStorage.getItem("levels_passed");
+            if (rawPassed) {
+                try {
+                    beaten = JSON.parse(rawPassed);
+                } catch (e) {
+                    beaten = [];
+                }
+            }
+            if (beaten.indexOf(levelNumber) === -1) {
+                beaten.push(levelNumber);
+                localStorage.setItem("levels_passed", JSON.stringify(beaten));
+            }
+        }
+        title.textContent = passed ? "Level passed" : "Level failed";
+        title.className = passed ? "lvl-finish-heading pass" : "lvl-finish-heading fail";
+        accuracyOut.textContent = data.accuracy.toFixed(1) + "%";
+        wpmOut.textContent = data.wpm.toFixed(1);
+
+        reviewSlot.innerHTML = "";
+        var label = document.createElement("p");
+        label.textContent = "Overview";
+        label.className = "lvl-finish-overview-label";
+        reviewSlot.appendChild(label);
+
+        var textWrap = document.createElement("div");
+        textWrap.className = "lvl-finish-overview-text";
+        var guide = data.prompt || "";
+        var input = data.typed || "";
+
+        for (var i = 0; i < guide.length; i++) {
+            if (guide[i] === "\n") {
+                textWrap.appendChild(document.createElement("br"));
+                continue;
+            }
+            var bit = document.createElement("span");
+            bit.textContent = guide[i];
+            if (input[i] === guide[i]) {
+                bit.className = "hit";
+            } else {
+                bit.className = "miss";
+            }
+            textWrap.appendChild(bit);
+        }
+        reviewSlot.appendChild(textWrap);
+    }
+
+    document.getElementById("restartLink").onclick = function () {
+        sessionStorage.removeItem(resultsKey);
+    };
+
+    updateFinishPage();
+    window.addEventListener("pageshow", updateFinishPage);
+</script>
+</body>
+</html>

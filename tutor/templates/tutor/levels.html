@@ -20,8 +20,9 @@ level pages to it. -->
                 <a
                     href="{% url 'level_page' level.number %}"
                     data-level="{{ level.number }}"
+                    data-play-url="{% url 'level_page' level.number %}"
                     data-done-url="{% url 'level_complete' level.number %}"
-                    class="level-box level-{{ level.status }} {% if level.number == 10 %}level-10{% endif %} level-pick"
+                    class="level-box level-locked {% if level.number == 10 %}level-10{% endif %} level-pick"
                 >
                     <span>{{ level.number }}</span>
                 </a>
@@ -29,15 +30,55 @@ level pages to it. -->
         </section>
     </main>
 
-<!-- Checks which levels are complete and updates their buttons. -->
+<!-- here I got the player's progress and worked out which level should be available next. -->
 
 <script>
+    function getPassedLevels() {
+        var raw = localStorage.getItem("levels_passed");
+        if (!raw) return [];
+        try {
+            return JSON.parse(raw);
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function nextOpenLevel() {
+        var passed = getPassedLevels();
+        if (passed.length === 0) return 1;
+        return Math.max.apply(null, passed) + 1;
+    }
+
+    var passed = getPassedLevels();
+    var openLevel = nextOpenLevel();
     var picks = document.querySelectorAll(".level-pick");
+
     for (var i = 0; i < picks.length; i++) {
         var link = picks[i];
-        var num = link.getAttribute("data-level");
-        if (sessionStorage.getItem("level_result_" + num)) {
-            link.setAttribute("href", link.getAttribute("data-done-url"));
+        var num = parseInt(link.getAttribute("data-level"), 10);
+        var pending = sessionStorage.getItem("level_result_" + num);
+        var playUrl = link.getAttribute("data-play-url");
+        var doneUrl = link.getAttribute("data-done-url");
+
+        link.classList.remove("level-completed", "level-current", "level-locked");
+
+        if (passed.indexOf(num) !== -1) {
+            link.classList.add("level-completed");
+            if (pending) {
+                link.setAttribute("href", doneUrl);
+            } else {
+                link.setAttribute("href", playUrl);
+            }
+        } else if (num === openLevel && num <= 10) {
+            link.classList.add("level-current");
+            if (pending) {
+                link.setAttribute("href", doneUrl);
+            } else {
+                link.setAttribute("href", playUrl);
+            }
+        } else {
+            link.classList.add("level-locked");
+            link.removeAttribute("href");
         }
     }
 </script>

@@ -41,9 +41,36 @@ have not added a "level_completion" page yet so it just shows a 404 error. -->
     const caretMarker = document.getElementById("caretMarker");
     const level = {{ level }};
     const doneUrl = "{% url 'level_complete' level %}";
+    const levelsUrl = "{% url 'levels' %}";
 
-    if (sessionStorage.getItem("level_result_" + level)) {
+<!-- Passed Level storage -->
+
+    function getPassedLevels() {
+        var raw = localStorage.getItem("levels_passed");
+        if (!raw) return [];
+        try {
+            return JSON.parse(raw);
+        } catch (e) {
+            return [];
+        }
+    }
+
+<!-- Only the next level can be chosen -->
+
+    function nextOpenLevel() {
+        var passed = getPassedLevels();
+        if (passed.length === 0) return 1;
+        return Math.max.apply(null, passed) + 1;
+    }
+
+    var passedLevels = getPassedLevels();
+    var openLevel = nextOpenLevel();
+    var pending = sessionStorage.getItem("level_result_" + level);
+
+    if (pending) {
         window.location.replace(doneUrl);
+    } else if (level !== openLevel && passedLevels.indexOf(level) === -1) {
+        window.location.replace(levelsUrl);
     }
 
     // I keep only the remaining guide text visible.
@@ -190,13 +217,16 @@ function countWpm(prompt, typed, seconds) {
                 clearInterval(timer);
                 typingInput.disabled = true;
                 var typedText = typingInput.value;
+                var accuracy = countAccuracy(promptText, typedText);
+                var wpm = countWpm(promptText, typedText, levelSeconds);
                 sessionStorage.setItem(
                     "level_result_" + level,
                     JSON.stringify({
                         prompt: promptText,
                         typed: typedText,
-                        accuracy: countAccuracy(promptText, typedText),
-                        wpm: countWpm(promptText, typedText, levelSeconds)
+                        accuracy: accuracy,
+                        wpm: wpm,
+                        passed: accuracy >= 90 && wpm >= 55
                     })
                 );
                 window.location.href = "/level-complete/" + level + "/";

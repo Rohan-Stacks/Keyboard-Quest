@@ -197,6 +197,13 @@ h1 {
 
 .level-locked {
     background: var(--dark-gray);
+    cursor: default;
+    pointer-events: none;
+}
+
+.level-completed:not([href]) {
+    cursor: default;
+    pointer-events: none;
 }
 
 .level-10 {
