@@ -32,6 +32,8 @@
         </section>
     </main>
 
+    {% include "tutor/sounds_include.html" %}
+
 <script>
     var levelNumber = {{ level }};
     var resultsKey = "level_result_" + levelNumber;
@@ -119,6 +121,11 @@
 
     updateFinishPage();
     window.addEventListener("pageshow", updateFinishPage);
+
+    // I play the finish sound when the user gets here after a level attempt.
+    if (sessionStorage.getItem(resultsKey)) {
+        playFinish();
+    }
 </script>
 </body>
 </html>

@@ -13,7 +13,8 @@ level pages to it. -->
 <body>
     <main class="page">
         <h1>Keyboard Quest</h1>
-        <p>Select a level</p>
+        <!-- Added back button for easier nav -->
+        <a href="{% url 'home' %}" class="back-link">Back to Home</a>
 
         <section class="level-grid">
             {% for level in levels %}
@@ -82,5 +83,6 @@ level pages to it. -->
         }
     }
 </script>
+    {% include "tutor/sounds_include.html" %}
 </body>
 </html>

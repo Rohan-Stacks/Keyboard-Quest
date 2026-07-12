@@ -1,6 +1,5 @@
 <!-- I redesigned the home page into a cleaner menu with
-Start Typing, Settings, and About options (settings doesnt do anything yet
- but planed to add an option to turn off accuracy, wpm, font color, and what not-->
+Start Typing, Settings, and About options. -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +8,7 @@ Start Typing, Settings, and About options (settings doesnt do anything yet
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keyboard Quest</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'tutor/style.css' %}">
+    <link rel="stylesheet" href="{% static 'tutor/style.css' %}?v=3">
 </head>
 <body>
     <main class="page">
@@ -27,10 +26,10 @@ Start Typing, Settings, and About options (settings doesnt do anything yet
                 <span class="menu-text">Go to level selection</span>
             </a>
 
-            <button class="menu-card menu-settings" type="button" disabled>
+            <a class="menu-card menu-settings" href="{% url 'settings' %}">
                 <span class="menu-title">Settings</span>
-                <span class="menu-text">Coming soon</span>
-            </button>
+                <span class="menu-text">Sound options</span>
+            </a>
 
             <a class="menu-card menu-about" href="{% url 'about' %}">
                 <span class="menu-title">About</span>
@@ -38,5 +37,6 @@ Start Typing, Settings, and About options (settings doesnt do anything yet
             </a>
         </nav>
     </main>
+    {% include "tutor/sounds_include.html" %}
 </body>
 </html>

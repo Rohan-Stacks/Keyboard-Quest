@@ -7,6 +7,9 @@ def home(request):
 def about(request):
     return render(request, "tutor/about.html")
 
+def settings(request):
+    return render(request, "tutor/settings.html")
+
 def level_select(request):
     completed_levels = 0
 
