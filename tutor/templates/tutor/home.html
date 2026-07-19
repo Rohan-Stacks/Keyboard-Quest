@@ -8,9 +8,11 @@ Start Typing, Settings, and About options. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keyboard Quest</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'tutor/style.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'tutor/style.css' %}?v=4">
 </head>
 <body>
+    <a class="admin-top-link" href="{% url 'admin_login' %}">Admin</a>
+
     <main class="page">
         <section class="hero">
             <p class="eyebrow">Software Engineering Typing Tutor</p>

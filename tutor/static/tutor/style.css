@@ -532,3 +532,233 @@ h1 {
     background: rgba(239, 68, 68, 0.35);
     color: #fff;
 }
+
+/* I styled the admin pages to match the rest of the app. */
+
+.admin-top-link {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 20;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.admin-top-link:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.admin-page {
+    justify-content: flex-start;
+    padding-top: 36px;
+    padding-bottom: 40px;
+    text-align: left;
+}
+
+.admin-header {
+    width: min(1100px, 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* I grouped the title bits so they stack instead of spreading across the row. */
+.admin-header-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    flex: 1;
+    min-width: 260px;
+}
+
+.admin-header-centered {
+    justify-content: center;
+}
+
+.admin-header-centered .admin-header-main {
+    align-items: center;
+    text-align: center;
+    flex: 0 1 auto;
+}
+
+.admin-header-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.admin-login-card {
+    width: min(520px, 100%);
+}
+
+.admin-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.admin-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.admin-input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.06);
+    color: white;
+    font-size: 1rem;
+    outline: none;
+}
+
+.admin-input:focus {
+    border-color: white;
+}
+
+.admin-textarea {
+    width: 100%;
+    min-height: 180px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.06);
+    color: white;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+    font-family: "Courier New", Courier, monospace;
+}
+
+.admin-textarea:focus {
+    border-color: white;
+}
+
+.admin-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.admin-btn {
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 2px solid white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    color: white;
+}
+
+.admin-btn-primary {
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.95), rgba(29, 78, 216, 0.95));
+}
+
+.admin-btn-primary:hover {
+    filter: brightness(1.05);
+}
+
+.admin-error {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(248, 113, 113, 0.6);
+    color: #fecaca;
+}
+
+.admin-messages {
+    width: min(1100px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-message {
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+}
+
+.admin-message-success {
+    background: rgba(34, 197, 94, 0.18);
+    border: 1px solid rgba(74, 222, 128, 0.55);
+    color: #bbf7d0;
+}
+
+.admin-message-error {
+    background: rgba(239, 68, 68, 0.18);
+    border: 1px solid rgba(248, 113, 113, 0.55);
+    color: #fecaca;
+}
+
+.admin-message-warning {
+    background: rgba(234, 179, 8, 0.18);
+    border: 1px solid rgba(250, 204, 21, 0.55);
+    color: #fef08a;
+}
+
+/* I kept the admin vocab page simple like my settings page. */
+.admin-vocab-page {
+    text-align: center;
+}
+
+.admin-vocab-card {
+    width: min(760px, 100%);
+    text-align: left;
+}
+
+.admin-vocab-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.admin-topic-block h2 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+}
+
+.admin-textarea {
+    min-height: 90px;
+}
+
+.admin-vocab-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+@media (max-width: 760px) {
+    .admin-top-link {
+        top: 12px;
+        right: 12px;
+        padding: 8px 12px;
+        font-size: 0.88rem;
+    }
+}

@@ -20,6 +20,7 @@
             <div class="lvl-finish-slot" id="reviewSlot"></div>
 
             <div class="lvl-finish-stats">
+                <p>Required: <span id="requiredOut">—</span></p>
                 <p>Accuracy: <span id="accuracyOut">—</span></p>
                 <p>WPM: <span id="wpmOut">—</span></p>
             </div>
@@ -34,13 +35,17 @@
 
     {% include "tutor/sounds_include.html" %}
 
+<script src="{% static 'tutor/difficulty.js' %}"></script>
 <script>
     var levelNumber = {{ level }};
-    var resultsKey = "level_result_" + levelNumber;
+    var resultsKey = getResultKey(levelNumber);
     var title = document.getElementById("resultTitle");
     var reviewSlot = document.getElementById("reviewSlot");
+    var requiredOut = document.getElementById("requiredOut");
     var accuracyOut = document.getElementById("accuracyOut");
     var wpmOut = document.getElementById("wpmOut");
+
+    requiredOut.textContent = formatPassRules();
 
     function updateFinishPage() {
         var saved = sessionStorage.getItem(resultsKey);
@@ -66,21 +71,10 @@
             return;
         }
 
-        var passed = data.accuracy >= 90 && data.wpm >= 55;
+        // I check pass using the difficulty the player picked on the level select page.
+        var passed = didPass(data.accuracy, data.wpm);
         if (passed) {
-            var beaten = [];
-            var rawPassed = localStorage.getItem("levels_passed");
-            if (rawPassed) {
-                try {
-                    beaten = JSON.parse(rawPassed);
-                } catch (e) {
-                    beaten = [];
-                }
-            }
-            if (beaten.indexOf(levelNumber) === -1) {
-                beaten.push(levelNumber);
-                localStorage.setItem("levels_passed", JSON.stringify(beaten));
-            }
+            savePassedLevel(levelNumber);
         }
         title.textContent = passed ? "Level passed" : "Level failed";
         title.className = passed ? "lvl-finish-heading pass" : "lvl-finish-heading fail";

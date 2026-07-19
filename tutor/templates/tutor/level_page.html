@@ -24,7 +24,7 @@ instead of a submit button-->
     <textarea id="typingInput" class="typing-input" spellcheck="false"></textarea>
 </div>
 
-<div id="promptSource" style="display:none;">{% block prompt %}{% endblock %}</div>
+<div id="promptSource" style="display:none;">{% block prompt %}{{ prompt_text }}{% endblock %}</div>
 
             <a class="back-link" href="{% url 'levels' %}">Back to Levels</a>
         </section>
@@ -33,6 +33,7 @@ instead of a submit button-->
 <!-- Here is the timer that is set to start after the user inputs any character,
 have not added a "level_completion" page yet so it just shows a 404 error. -->
 
+<script src="{% static 'tutor/difficulty.js' %}"></script>
 <script>
     const typingInput = document.getElementById("typingInput");
     const timeLeft = document.getElementById("timeLeft");
@@ -43,29 +44,9 @@ have not added a "level_completion" page yet so it just shows a 404 error. -->
     const doneUrl = "{% url 'level_complete' level %}";
     const levelsUrl = "{% url 'levels' %}";
 
-<!-- Passed Level storage -->
-
-    function getPassedLevels() {
-        var raw = localStorage.getItem("levels_passed");
-        if (!raw) return [];
-        try {
-            return JSON.parse(raw);
-        } catch (e) {
-            return [];
-        }
-    }
-
-<!-- Only the next level can be chosen -->
-
-    function nextOpenLevel() {
-        var passed = getPassedLevels();
-        if (passed.length === 0) return 1;
-        return Math.max.apply(null, passed) + 1;
-    }
-
     var passedLevels = getPassedLevels();
     var openLevel = nextOpenLevel();
-    var pending = sessionStorage.getItem("level_result_" + level);
+    var pending = sessionStorage.getItem(getResultKey(level));
 
     if (pending) {
         window.location.replace(doneUrl);
@@ -211,22 +192,21 @@ function countWpm(prompt, typed, seconds) {
             time -= 1;
             timeLeft.textContent = time;
 
-// Saving the player's results
-
             if (time <= 0) {
                 clearInterval(timer);
                 typingInput.disabled = true;
                 var typedText = typingInput.value;
                 var accuracy = countAccuracy(promptText, typedText);
                 var wpm = countWpm(promptText, typedText, levelSeconds);
+                // I use didPass() here so easy/medium/hard all share the same pass logic.
                 sessionStorage.setItem(
-                    "level_result_" + level,
+                    getResultKey(level),
                     JSON.stringify({
                         prompt: promptText,
                         typed: typedText,
                         accuracy: accuracy,
                         wpm: wpm,
-                        passed: accuracy >= 90 && wpm >= 55
+                        passed: didPass(accuracy, wpm)
                     })
                 );
                 window.location.href = "/level-complete/" + level + "/";

@@ -9,6 +9,7 @@ level pages to it. -->
     <title>Choose a Level</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'tutor/style.css' %}">
+    <link rel="stylesheet" href="{% static 'tutor/difficulty.css' %}">
 </head>
 <body>
     <main class="page">
@@ -29,59 +30,89 @@ level pages to it. -->
                 </a>
             {% endfor %}
         </section>
+
+        <section class="level-card difficulty-picker">
+            <p class="eyebrow">Difficulty</p>
+            <div class="difficulty-options">
+                <button type="button" class="back-link difficulty-btn" data-difficulty="easy">Easy</button>
+                <button type="button" class="back-link difficulty-btn" data-difficulty="medium">Medium</button>
+                <button type="button" class="back-link difficulty-btn" data-difficulty="hard">Hard</button>
+            </div>
+            <p class="difficulty-hint" id="difficultyHint"></p>
+        </section>
     </main>
 
 <!-- here I got the player's progress and worked out which level should be available next. -->
 
+<script src="{% static 'tutor/difficulty.js' %}"></script>
 <script>
-    function getPassedLevels() {
-        var raw = localStorage.getItem("levels_passed");
-        if (!raw) return [];
-        try {
-            return JSON.parse(raw);
-        } catch (e) {
-            return [];
+    var difficultyHint = document.getElementById("difficultyHint");
+    var difficultyButtons = document.querySelectorAll(".difficulty-btn");
+
+    function updateDifficultyHint() {
+        difficultyHint.textContent = "Pass with " + formatPassRules();
+    }
+
+    function updateDifficultyButtons() {
+        var current = getDifficulty();
+        for (var i = 0; i < difficultyButtons.length; i++) {
+            var btn = difficultyButtons[i];
+            if (btn.getAttribute("data-difficulty") === current) {
+                btn.classList.add("active");
+            } else {
+                btn.classList.remove("active");
+            }
         }
     }
 
-    function nextOpenLevel() {
+    function refreshLevelGrid() {
         var passed = getPassedLevels();
-        if (passed.length === 0) return 1;
-        return Math.max.apply(null, passed) + 1;
-    }
+        var openLevel = nextOpenLevel();
+        var picks = document.querySelectorAll(".level-pick");
 
-    var passed = getPassedLevels();
-    var openLevel = nextOpenLevel();
-    var picks = document.querySelectorAll(".level-pick");
+        for (var i = 0; i < picks.length; i++) {
+            var link = picks[i];
+            var num = parseInt(link.getAttribute("data-level"), 10);
+            var pending = sessionStorage.getItem(getResultKey(num));
+            var playUrl = link.getAttribute("data-play-url");
+            var doneUrl = link.getAttribute("data-done-url");
 
-    for (var i = 0; i < picks.length; i++) {
-        var link = picks[i];
-        var num = parseInt(link.getAttribute("data-level"), 10);
-        var pending = sessionStorage.getItem("level_result_" + num);
-        var playUrl = link.getAttribute("data-play-url");
-        var doneUrl = link.getAttribute("data-done-url");
+            link.classList.remove("level-completed", "level-current", "level-locked");
 
-        link.classList.remove("level-completed", "level-current", "level-locked");
-
-        if (passed.indexOf(num) !== -1) {
-            link.classList.add("level-completed");
-            if (pending) {
-                link.setAttribute("href", doneUrl);
+            if (passed.indexOf(num) !== -1) {
+                link.classList.add("level-completed");
+                if (pending) {
+                    link.setAttribute("href", doneUrl);
+                } else {
+                    link.setAttribute("href", playUrl);
+                }
+            } else if (num === openLevel && num <= 10) {
+                link.classList.add("level-current");
+                if (pending) {
+                    link.setAttribute("href", doneUrl);
+                } else {
+                    link.setAttribute("href", playUrl);
+                }
             } else {
-                link.setAttribute("href", playUrl);
+                link.classList.add("level-locked");
+                link.removeAttribute("href");
             }
-        } else if (num === openLevel && num <= 10) {
-            link.classList.add("level-current");
-            if (pending) {
-                link.setAttribute("href", doneUrl);
-            } else {
-                link.setAttribute("href", playUrl);
-            }
-        } else {
-            link.classList.add("level-locked");
-            link.removeAttribute("href");
         }
     }
+
+    // I refresh the level grid when the user switches difficulty so each mode keeps its own progress.
+    for (var b = 0; b < difficultyButtons.length; b++) {
+        difficultyButtons[b].addEventListener("click", function () {
+            setDifficulty(this.getAttribute("data-difficulty"));
+            updateDifficultyButtons();
+            updateDifficultyHint();
+            refreshLevelGrid();
+        });
+    }
+
+    updateDifficultyButtons();
+    updateDifficultyHint();
+    refreshLevelGrid();
 </script>
     {% include "tutor/sounds_include.html" %}
 </body>
