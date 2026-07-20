@@ -15,7 +15,7 @@ instead of a submit button-->
         <section class="level-card">
             <div class="level-head">
                 <p class="eyebrow">Level {{ level }}</p>
-                <p class="timer-box">Time: <span id="timeLeft">{% block time_limit %}20{% endblock %}</span>s</p>
+                <p class="timer-box">Time: <span id="timeLeft">0</span>s</p>
             </div>
 
 <div class="typing-wrap" id="typingWrap">
@@ -59,8 +59,8 @@ const promptSource = document.getElementById("promptSource");
 const promptText = (promptSource.textContent || "").replace(/\r/g, "").trim();
 
 let started = false;
-let time = parseInt(timeLeft.textContent, 10);
-const levelSeconds = time;
+let time = 0;
+let timer;
 
 const charSpans = [];
 
@@ -189,29 +189,28 @@ function countWpm(prompt, typed, seconds) {
         started = true;
 
         const timer = setInterval(() => {
-            time -= 1;
+            time += 1;
             timeLeft.textContent = time;
-
-            if (time <= 0) {
-                clearInterval(timer);
-                typingInput.disabled = true;
-                var typedText = typingInput.value;
-                var accuracy = countAccuracy(promptText, typedText);
-                var wpm = countWpm(promptText, typedText, levelSeconds);
-                // I use didPass() here so easy/medium/hard all share the same pass logic.
-                sessionStorage.setItem(
-                    getResultKey(level),
-                    JSON.stringify({
-                        prompt: promptText,
-                        typed: typedText,
-                        accuracy: accuracy,
-                        wpm: wpm,
-                        passed: didPass(accuracy, wpm)
-                    })
-                );
-                window.location.href = "/level-complete/" + level + "/";
-            }
         }, 1000);
+    }
+
+    function finishLevel() {
+        clearInterval(timer);
+        typingInput.disabled = true;
+        var typedText = typingInput.value;
+        var accuracy = countAccuracy(promptText, typedText);
+        var wpm = countWpm(promptText, typedText, time);
+        sessionStorage.setItem(
+            getResultKey(level),
+            JSON.stringify({
+                prompt: promptText,
+                typed: typedText,
+                accuracy: accuracy,
+                wpm: wpm,
+                passed: didPass(accuracy, wpm)
+            })
+        );
+        window.location.href = "/level-complete/" + level + "/";
     }
 
 buildPromptGuide();
@@ -224,6 +223,10 @@ typingInput.addEventListener("input", () => {
     startTimer();
     updatePromptGuide();
     moveCaretMarker();
+    
+    if (typingInput.value.length === promptText.length) {
+        finishLevel();
+    }
 });
 
 typingInput.addEventListener("keyup", moveCaretMarker);
