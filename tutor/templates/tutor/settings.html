@@ -1,0 +1,51 @@
+<!-- I added this page so users can turn SFX on or off without
+needing to dig through browser settings. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Keyboard Quest</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tutor/style.css' %}?v=3">
+</head>
+<body>
+    <main class="page settings-page">
+        <header class="settings-header">
+            <p class="eyebrow">Keyboard Quest</p>
+            <h1 class="settings-heading">Settings</h1>
+        </header>
+
+        <section class="level-card settings-card">
+            <div class="settings-panel">
+                <div class="settings-row">
+                    <span class="settings-label">SFX</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="sfx-toggle">
+                        <span class="toggle-track"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-footer">
+                <a class="back-link" href="{% url 'home' %}">Back to Home</a>
+            </div>
+        </section>
+    </main>
+
+    {% include "tutor/sounds_include.html" %}
+    <script>
+        // I save the toggle choice straight here so it still works even if the page reloads.
+        var sfxToggle = document.getElementById("sfx-toggle");
+
+        sfxToggle.checked = localStorage.getItem("sfx_on") !== "false";
+
+        sfxToggle.addEventListener("change", function () {
+            var isOn = sfxToggle.checked;
+            localStorage.setItem("sfx_on", isOn ? "true" : "false");
+            setSfxOn(isOn);
+        });
+    </script>
+</body>
+</html>

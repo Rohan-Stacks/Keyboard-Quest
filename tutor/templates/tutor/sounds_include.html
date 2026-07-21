@@ -1,0 +1,8 @@
+{% load static %}
+<script src="{% static 'tutor/sounds.js' %}?v=3"></script>
+<script>
+    initSounds(
+        "{% static 'tutor/sounds/button-click.mp3' %}",
+        "{% static 'tutor/sounds/level-finish.mp3' %}"
+    );
+</script>

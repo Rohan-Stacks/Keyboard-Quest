@@ -110,21 +110,11 @@ def admin_vocab(request):
 
 
 def level_select(request):
-    completed_levels = 0
-
     levels = []
     for number in range(1, 11):
-        if number <= completed_levels:
-            status = "completed"
-        elif number == completed_levels + 1:
-            status = "current"
-        else:
-            status = "locked"
-
         levels.append(
             {
                 "number": number,
-                "status": status,
             }
         )
 

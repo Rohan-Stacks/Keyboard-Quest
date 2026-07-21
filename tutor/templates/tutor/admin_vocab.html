@@ -1,0 +1,54 @@
+<!-- I made this page so the admin can type in vocab and save it. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Keyboard Quest</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tutor/style.css' %}?v=6">
+</head>
+<body>
+    <main class="page settings-page admin-vocab-page">
+        <header class="settings-header">
+            <p class="eyebrow">Keyboard Quest</p>
+            <h1 class="settings-heading">Admin</h1>
+            <p class="subtitle">Enter up to {{ max_words }} words per topic, one per line.</p>
+        </header>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p class="admin-message admin-message-{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <section class="level-card settings-card admin-vocab-card">
+            <form method="post" class="admin-vocab-form">
+                {% csrf_token %}
+
+                {% for topic in topic_rows %}
+                    <div class="admin-topic-block">
+                        <h2>{{ topic.name }}</h2>
+                        <textarea
+                            class="admin-textarea"
+                            id="vocab_{{ topic.slug }}"
+                            name="vocab_{{ topic.slug }}"
+                            rows="4"
+                            placeholder="one word per line"
+                        >{{ topic.words_text }}</textarea>
+                    </div>
+                {% endfor %}
+
+                <div class="admin-vocab-footer">
+                    <button type="submit" class="admin-btn admin-btn-primary">Save</button>
+                    <a class="back-link" href="{% url 'home' %}">Back to Home</a>
+                    <a class="back-link" href="{% url 'admin_logout' %}">Log Out</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    {% include "tutor/sounds_include.html" %}
+</body>
+</html>

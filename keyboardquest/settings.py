@@ -117,6 +117,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Session security settings
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

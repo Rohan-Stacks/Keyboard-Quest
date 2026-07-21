@@ -1,0 +1,30 @@
+{
+  "Identify": {
+    "definition": "Recognise and name.",
+    "exemplar": "Identify - Recognise and name: Object-oriented programming provides several important benefits to software development, including code reusability, modularity and maintainability."
+  },
+  "Define": {
+    "definition": "State meaning and identify essential qualities.",
+    "exemplar": "Define - State meaning and identify essential qualities: Encapsulation is an object-oriented programming principle that combines data and the methods that operate on that data within a single class. It also restricts direct access to an object's internal data by using access modifiers such as private and public. which protects data integrity and makes software easier to maintain."
+  },
+  "Describe": {
+    "definition": "Provide characteristics and features.",
+    "exemplar": "Describe - Provide characteristics and features: Application Programming Interfaces (APIs) allow different software applications to communicate by exchanging requests and responses. They provide a standard set of rules that software follows when requesting or sharing information, APIs are commonly used to connect websites, databases and third-party services. Their main features include reusability, interoperability and efficient communication between different systems."
+  },
+  "Explain": {
+    "definition": "Relate cause and effect. Make the relationships between things evident. Provide why and/or how.",
+    "exemplar": "Explain - Relate cause and effect. Make the relationships between things evident. Provide why and/or how: Encryption improves data security by converting readable information into ciphertext that can only be understood with the correct decryption key. This means that if data is intercepted during transmission or stolen from storage, unauthorised users cannot easily read its contents. As a result, encryption protects confidential information, reduces the risk of data breaches and helps organisations comply with privacy and security requirements. For these reasons, encryption is an essential component of modern software systems."
+  },
+  "Analyse": {
+    "definition": "Identify components and the relationship between them. Draw out and relate implications.",
+    "exemplar": "Analyse - Identify components and the relationship between them. Draw out and relate implications: Front-end and back-end development perform different but closely connected roles within a web application. The front end is responsible for the visual interface, allowing users to interact with the application through buttons, forms and web pages. The back end processes user requests, communicates with databases, performs calculations and manages application logic. These two components constantly exchange information through APIs and server requests. If either component fails to function correctly, the overall application becomes less reliable or unusable. Effective communication between the front end and back end is essential for producing secure, responsive and functional software."
+  },
+  "Justify": {
+    "definition": "Support an argument or conclusion.",
+    "exemplar": "Justify - Support an argument or conclusion: Version control should be used throughout software development because it provides an organised record of every change made to a project. Developers can restore previous versions if errors occur, compare changes between versions and identify when problems were introduced. It also allows multiple developers to work on the same project simultaneously without overwriting each other's work through features such as branching and merging. This improves collaboration, reduces development risks and increases productivity, Although version control does require developers to learn additional tools and workflows, the benefits greatly outweigh the disadvantages. Version control is an essential practice in modern software engineering."
+  },
+  "Evaluate": {
+    "definition": "Make a judgement based on criteria. Determine the value of.",
+    "exemplar": "Evaluate - Make a judgement based on criteria. Determine the value of: Multi-factor authentication (MFA) is one of the most effective methods of protecting user accounts from unauthorised access. By requiring users to verify their identity using two or more independent factors, such as a password and a one-time verification code, MFA significantly reduces the likelihood of compromised accounts. It is particularly valuable when passwords are weak, reused or exposed through data breaches. However MFA can slightly reduce convenience because users must complete an additional verification step during login and may encounter difficulties if they lose access to their authentication device. Despite this limitation, the substantial improvements in security, protection of sensitive information and reduction in cyber attacks outweigh the minor inconvenience. Based on the criteria of security, reliability and overall effectiveness, multi-factor authentication is a highly valuable security measure for modern software systems."
+  }
+}

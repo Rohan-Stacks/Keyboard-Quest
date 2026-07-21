@@ -1,0 +1,50 @@
+<!-- I added a password page so only the admin can edit vocabulary files. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Keyboard Quest</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tutor/style.css' %}?v=6">
+</head>
+<body>
+    <main class="page admin-page">
+        <header class="admin-header admin-header-centered">
+            <div class="admin-header-main">
+                <p class="eyebrow">Keyboard Quest</p>
+                <h1 class="settings-heading">Admin Login</h1>
+                <p class="subtitle">Enter the admin password.</p>
+            </div>
+        </header>
+
+        <section class="level-card admin-login-card">
+            <form method="post" class="admin-login-form">
+                {% csrf_token %}
+
+                <label class="admin-label" for="password">Password</label>
+                <input
+                    class="admin-input"
+                    type="password"
+                    id="password"
+                    name="password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                {% if error %}
+                    <p class="admin-error">{{ error }}</p>
+                {% endif %}
+
+                <div class="admin-actions">
+                    <button type="submit" class="admin-btn admin-btn-primary">Log In</button>
+                    <a class="back-link" href="{% url 'home' %}">Back to Home</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    {% include "tutor/sounds_include.html" %}
+</body>
+</html>
